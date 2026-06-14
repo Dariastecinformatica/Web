@@ -36,7 +36,20 @@ img,video{display:block;max-width:100%}
 h1,h2,h3,h4,h5,h6{font-family:var(--font-display);letter-spacing:-0.02em;font-weight:700}
 .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
 @media(min-width:1024px){.container{padding:0 2.5rem}}
-.text-gradient{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.text-gradient{
+  background:linear-gradient(90deg,#3a5bff,#5fb8ff,#ffffff,#5fb8ff,#3a5bff);
+  background-size:300% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:shine 5s linear infinite;
+}
+@keyframes shine{
+  0%{background-position:0% center}
+  100%{background-position:300% center}
+}
+
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.75rem;border-radius:999px;font-family:var(--font-display);font-weight:600;font-size:.9rem;transition:var(--transition);cursor:pointer;border:1px solid transparent}
@@ -50,7 +63,58 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);letter-spacing:-0.02em;font-we
 .site-header{position:sticky;top:0;z-index:50;background:rgba(11,18,48,0.7);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:var(--transition)}
 .site-header.scrolled{background:rgba(11,18,48,0.92);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:1rem 0}
-.logo{font-family:var(--font-display);font-weight:700;font-size:1.4rem}
+
+.logo{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 18px;
+    border-radius:14px;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.4rem;
+    overflow:hidden;
+    animation:logoFloat 4s ease-in-out infinite;
+    background:rgba(58,91,255,.12);
+    border:1px solid rgba(95,184,255,.35);
+    backdrop-filter:blur(10px);
+    transition:.35s ease;
+}
+.logo::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius:14px;
+    background:linear-gradient(90deg,transparent,#5fb8ff,#3a5bff,#5fb8ff,transparent);
+    background-size:300% 100%;
+    animation:borderFlow 4s linear infinite;
+    z-index:-1;
+}
+.logo::after{
+    content:"";
+    position:absolute;
+    inset:1px;
+    border-radius:13px;
+    background:#0b1230;
+    z-index:-1;
+}
+@keyframes borderFlow{
+    0%{background-position:0% 50%}
+    100%{background-position:300% 50%}
+}
+@keyframes logoFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-4px)}
+}
+.logo:hover{
+    transform:translateY(-2px) scale(1.05);
+    box-shadow:0 0 20px rgba(95,184,255,.5),0 0 40px rgba(58,91,255,.3);
+}
+.logo:hover .text-gradient{
+    filter:drop-shadow(0 0 12px rgba(95,184,255,.8));
+}
+
 .nav{display:none;gap:2rem;font-size:.9rem;color:var(--muted-foreground)}
 .nav a{position:relative;padding:.25rem 0;transition:color .2s}
 .nav a:hover,.nav a.active{color:var(--foreground)}
@@ -168,22 +232,104 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);letter-spacing:-0.02em;font-we
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.hero-blob,.icon-primary{animation:none}}
 
 /* Showcase Slider */
-.showcase-slider{padding:60px 0;overflow:hidden;background:linear-gradient(180deg,#070b22,#0b1230)}
-.slider-container{position:relative;max-width:1200px;margin:auto}
+.showcase-slider{padding:60px 80px;overflow:visible;background:linear-gradient(180deg,#070b22,#0b1230)}
+.slider-container{position:relative;max-width:1200px;margin:auto;overflow:visible}
 .slider{position:relative;height:500px;border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
 .slide.active{opacity:1}
 .slide img{width:100%;height:100%;object-fit:cover}
-.slide-content{position:absolute;left:50px;bottom:50px;max-width:550px;z-index:2}
+.slide-content{position:absolute;left:90px;bottom:50px;max-width:500px;z-index:2}
 .slide-content h2{font-size:clamp(2rem,4vw,3.5rem);margin-bottom:15px}
 .slide-content p{color:#fff;font-size:1.1rem}
 .slide::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.75),rgba(0,0,0,.2))}
-.slider-nav{position:absolute;top:50%;transform:translateY(-50%);width:100%;display:flex;justify-content:space-between;padding:0 20px;z-index:10}
-.slider-nav button{width:50px;height:50px;border:none;border-radius:50%;background:rgba(255,255,255,.15);color:white;font-size:24px;cursor:pointer;backdrop-filter:blur(10px)}
+.slider-nav{position:absolute;inset:0;pointer-events:none;z-index:10}
+.slider-nav button{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border:none;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:22px;cursor:pointer;backdrop-filter:blur(10px);pointer-events:auto;transition:.3s}
+.slider-nav button:hover{background:rgba(58,91,255,.8)}
+#prevSlide{left:-70px}
+#nextSlide{right:-70px}
 .slider-dots{display:flex;justify-content:center;gap:10px;margin-top:20px}
 .slider-dots span{width:12px;height:12px;border-radius:50%;background:#666;cursor:pointer;transition:.3s}
 .slider-dots span.active{background:#5fb8ff;transform:scale(1.3)}
-@media(max-width:768px){.slider{height:350px}.slide-content{left:20px;right:20px;bottom:20px}.slide-content h2{font-size:1.8rem}.slide-content p{font-size:.95rem}}
+/* Slider más compacto y responsive */
+.slider{height:420px}
+
+.site-header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    backdrop-filter:blur(14px);
+    background:rgba(11,18,48,.72);
+    border-bottom:1px solid rgba(95,184,255,.18);
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+.site-header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:linear-gradient(90deg,
+        transparent,
+        rgba(95,184,255,.18),
+        transparent);
+    background-size:300% 100%;
+    animation:menuFlow 8s linear infinite;
+}
+@keyframes menuFlow{
+    from{background-position:0% 50%}
+    to{background-position:300% 50%}
+}
+
+.nav-links a{
+    position:relative;
+    padding:8px 14px;
+    border-radius:10px;
+    transition:.3s ease;
+}
+
+.nav-links a::after{
+    content:"";
+    position:absolute;
+    left:12px;
+    right:12px;
+    bottom:4px;
+    height:1px;
+    background:linear-gradient(90deg,#5fb8ff,#3a5bff);
+    transform:scaleX(0);
+    transform-origin:center;
+    transition:.3s ease;
+}
+
+.nav-links a:hover::after{
+    transform:scaleX(1);
+}
+
+.nav-links a:hover{
+    background:rgba(95,184,255,.06);
+    color:#fff;
+}
+
+
+@media(max-width:1024px){.slider{height:340px}}
+@media(max-width:768px){
+  #prevSlide{left:10px}
+  #nextSlide{right:10px}
+  .showcase-slider{padding:30px 15px}
+
+  .slider{height:260px}
+  .slide-content{left:60px;right:60px;bottom:20px;max-width:none}
+  .slide-content h2{font-size:1.5rem}
+  .slide-content p{font-size:.9rem}
+  .slider-nav button{width:40px;height:40px;font-size:18px}
+  #prevSlide{left:-70px}
+  #nextSlide{right:-70px}
+
+}
+@media(max-width:480px){
+  .slider{height:220px}
+  .slide-content h2{font-size:1.2rem;margin-bottom:8px}
+  .slide-content p{font-size:.8rem}
+}
+
 
 /* Oculta las flechas de navegación genéricas */
 .slick-prev, .slick-next, .owl-prev, .owl-next {
@@ -214,25 +360,6 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);letter-spacing:-0.02em;font-we
 </div>
 <main>
 
-<section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline poster="videos/hero-poster.jpg">
-    <source src="videos/hero-mobile.mp4" media="(max-width: 768px)" type="video/mp4">
-    <source src="videos/hero-opt.mp4" type="video/mp4">
-  </video>
-  <div class="hero-overlay"></div>
-  <div class="dot-bg"></div>
-  <div class="hero-blob"></div>
-  <div class="container hero-content">
-    <h1 class="reveal">Soluciones <span class="text-gradient">Informáticas</span>.</h1>
-    <p class="reveal" data-delay="1">En Dariastec brindamos servicios informáticos profesionales y desarrollamos sistemas que optimizan tu día a día. Reparación, seguridad y software, todo en un solo lugar.</p>
-    <div class="hero-cta reveal" data-delay="2">
-      <a href="contacto.html" class="btn btn-primary">Contactar ahora →</a>
-      <a href="servicios.html" class="btn btn-ghost">Ver servicios</a>
-    </div>
-  </div>
-</section>
-
-
 <section class="showcase-slider">
 <div class="container slider-container">
 <div class="slider">
@@ -261,6 +388,27 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);letter-spacing:-0.02em;font-we
 </div>
 </section>
 
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline poster="videos/hero-poster.jpg">
+    <source src="videos/hero-mobile.mp4" media="(max-width: 768px)" type="video/mp4">
+    <source src="videos/hero-opt.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="dot-bg"></div>
+  <div class="hero-blob"></div>
+  <div class="container hero-content">
+    <h1 class="reveal">Soluciones <span class="text-gradient">Informáticas</span>.</h1>
+    <p class="reveal" data-delay="1">En Dariastec brindamos servicios informáticos y desarrollamos sistemas que optimizan tu día a día. Reparación, seguridad y software, todo en un solo lugar.</p>
+    <div class="hero-cta reveal" data-delay="2">
+      <a href="contacto.html" class="btn btn-primary">Contactar ahora →</a>
+      <a href="servicios.html" class="btn btn-ghost">Ver servicios</a>
+    </div>
+  </div>
+</section>
+
+
+
+
 <section id="servicios" class="bento-section">
   <div class="container">
     <div class="bento">
@@ -284,7 +432,7 @@ h1,h2,h3,h4,h5,h6{font-family:var(--font-display);letter-spacing:-0.02em;font-we
         <div class="icon icon-primary">💻</div>
         <h3 class="card-title-lg">Sistemas a medida para tu negocio</h3>
         <p>Turnos online, facturación, CRM y reportes. Software diseñado a tu manera de trabajar.</p>
-        <a href="servicios.html" class="link-arrow">Ver aplicaciones ↗</a>
+        
       </article>
       <article class="card span-3 reveal" data-delay="4">
         <div class="row">
